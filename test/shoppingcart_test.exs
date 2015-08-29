@@ -52,13 +52,13 @@ defmodule ShoppingCartTest do
     assert (ShoppingCart.cart_list pid) ==
       [{:item1}, {:item2}]
   end
-  #
-  # test "test remove from cart" do
-  #   pid = cart_with_items
-  #   ShoppingCart.remove pid, {:item1}
-  #   assert (ShoppingCart.cart_list pid) ==
-  #     [{:add_item,{:item2}}]
-  # end
+
+  test "test remove from cart" do
+    pid = cart_with_items
+    ShoppingCart.remove pid, {:item1}
+    assert (ShoppingCart.cart_list pid) ==
+      [{:item2}]
+  end
 
 end
 

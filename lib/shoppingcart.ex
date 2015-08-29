@@ -39,7 +39,27 @@ defmodule ShoppingCart do
   # End GenEvent
 
   # Cart Logic
-  def filter_events(events), do: Enum.map(events, &item_from_event/1)
+  def filter_events(events) do
+    expanded_item_quantities = Enum.map(events, &event_kinds_to_quantity/1)
+    item_quantities = Enum.reduce(expanded_item_quantities, %{}, &count_items/2)
+    items_in_cart = Enum.filter(item_quantities, fn {_, quantity} -> quantity > 0 end)
+    # Enum.filter(item_quantities, )
+    # Enum.map(events, &item_from_event/1)
+    Enum.map(items_in_cart, fn {item, _} -> item end)
+  end
+
   def item_from_event({:add_item, item}), do: item
+  def item_from_event({:remove_item, item}), do: nil
+
+  def event_kinds_to_quantity({:add_item, item}), do: {item, 1}
+  def event_kinds_to_quantity({:remove_item, item}), do: {item, -1}
+
+  def count_items({item, quantity}, quantities) do
+    case Dict.has_key?(quantities, item) do
+      true -> Dict.put(quantities, item, quantities[item] + quantity)
+      false -> Dict.put(quantities, item, quantity)
+    end
+  end
+
   # End Cart Logic
 end
