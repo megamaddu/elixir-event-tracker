@@ -1,4 +1,0 @@
-ShoppingCart
-============
-
-** TODO: Add description **
